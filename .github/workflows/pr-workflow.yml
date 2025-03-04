@@ -1,0 +1,36 @@
+name: pr-workflow
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+    cancel-in-progress: true
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pr-workflow-job:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        github-server-url: https://github.com/dogusyuksel/openai-image-creator.git
+        lfs: true
+
+    - name: build
+      run: |
+        ./docker_ctl.sh -b -s -c "cd /workspace && ./execute_me.sh -s 1 -e 1 -c 1 -k ${{ secrets.API_KEY1 }}"
+
+    - name: Upload video as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: artifacts_folder
+        path: artifacts_folder
+
+    - name: Update PR Description
+      uses: nefrob/pr-description@v1.2.0
+      with:
+        content: output.md
+        contentIsFilePath: true
+        regex: ".*"
+        token: ${{ secrets.MY_TOKEN }}

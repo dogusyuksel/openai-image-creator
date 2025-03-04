@@ -1,0 +1,6 @@
+import os
+
+counter = 0
+for filename in os.listdir("."):
+    counter += 1
+    os.rename(filename, str(counter)+".txt")
