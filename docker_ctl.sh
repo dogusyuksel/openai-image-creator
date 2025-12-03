@@ -10,7 +10,7 @@ if [ "$#" -eq 1 ]; then
     fi
 fi
 
-BASENAME="img-creator-docker"
+BASENAME="dyshell"
 preferred_name=$BASENAME":latest"
 
 # Default values:
